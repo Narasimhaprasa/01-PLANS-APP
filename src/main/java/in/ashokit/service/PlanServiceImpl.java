@@ -23,7 +23,7 @@ public class PlanServiceImpl implements IPlanService {
 	@Override
 	public Map<Integer, String> getPlanCategories() {
 		List<PlanCategory> findAll = plancategoryRepo.findAll();
-		Map<Integer, String> planCategories = new HashMap();
+		Map<Integer, String> planCategories = new HashMap<Integer, String>();
 
 		findAll.forEach(category -> {
 			planCategories.put(category.getCategoryId(), category.getCategoryName());

@@ -1,0 +1,25 @@
+server:
+ port: 4343
+ #Datasource configuration properties
+spring:
+ datasource:
+  url: jdbc:h2:mem:testdb
+  username: ashokit
+  password: ashokit
+  driver-class-name: org.h2.Driver
+ jpa:
+  hibernate:
+   ddl-auto: update
+  
+  
+ #end users messages 
+plan-api:
+   messages:
+      planSaveSucc: Plan is saved successfully
+      planSaveFail: Plan is failed to saved
+      planUpdateSucc: Plan is Updated Sucessfully
+      planUpdateFail: Plan is Failed Update
+      planDeleteSucc: Plan is Deleted Successfully
+      planDeleteFail: Plan is falied to Delete
+      planStatusChange: Plan status change Succesfully
+      planStatusChangeFail: Plan staus is Failed to change

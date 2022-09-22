@@ -13,12 +13,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 	@Bean
-	
 	public Docket apiDoc() {
 
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("in.ashokit.controller"))
-				.paths(PathSelectors.any())
-				.build();
+				.apis(RequestHandlerSelectors.basePackage("in.ashokit.controller")).paths(PathSelectors.any()).build();
 	}
 }

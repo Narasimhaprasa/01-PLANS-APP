@@ -3,7 +3,6 @@ package in.ashokit.controller;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,13 +13,23 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import in.ashokit.Constants.AppConstants;
 import in.ashokit.entity.Plan;
-import in.ashokit.service.PlanServiceImpl;
+import in.ashokit.props.AppProperties;
+import in.ashokit.service.IPlanService;
 
 @RestController
 public class PlanRestController {
-	@Autowired
-	private PlanServiceImpl planService;
+
+	private IPlanService planService;
+
+	private Map<String, String> messages;
+
+	public PlanRestController(IPlanService planService, AppProperties props) {
+		this.planService = planService;
+		this.messages = props.getMessages();
+		System.out.println(this.messages);
+	}
 
 	@GetMapping("/allCategories")
 	public ResponseEntity<Map<Integer, String>> getAllPlanCategories() {
@@ -30,13 +39,17 @@ public class PlanRestController {
 
 	@PostMapping("/save")
 	public ResponseEntity<String> savePlans(@RequestBody Plan plan) {
-		String msg = "";
+		String msg = AppConstants.EMPTY_STR;
+
 		boolean isSaved = planService.savePlan(plan);
+
 		if (isSaved) {
-			msg = "Plan is saved";
+
+			msg = messages.get(AppConstants.PLAN_SAVE_SUCC);
 		} else {
-			msg = "Plan is not saved";
+			msg = messages.get(AppConstants.PLAN_SAVE_FAIL);
 		}
+		System.out.println(msg);
 		return new ResponseEntity<String>(msg, HttpStatus.CREATED);
 	}
 
@@ -56,22 +69,24 @@ public class PlanRestController {
 	public ResponseEntity<String> updatePlan(@RequestBody Plan plan) {
 
 		boolean isSaved = planService.updatePlan(plan);
-		String msg = "";
+
+		String msg = AppConstants.EMPTY_STR;
 		if (isSaved)
-			msg = "plan is updated";
+			msg = messages.get(AppConstants.PLAN_UPDATE_SUCC);
 		else
-			msg = "Plan is not updated";
+			msg = messages.get(AppConstants.PLAN_UPDATE_FAIL);
 		return new ResponseEntity<String>(msg, HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/deletePlan/{planId}")
 	public ResponseEntity<String> deletePlanById(@PathVariable Integer planId) {
 		boolean isDeleted = planService.deletePlanById(planId);
-		String msg = "";
+		String msg = AppConstants.EMPTY_STR;
+
 		if (isDeleted) {
-			msg = "Plan is deleted";
+			msg = messages.get(AppConstants.PLAN_DELETE_SUCC);
 		} else {
-			msg = "Plan is not deleted";
+			msg = messages.get(AppConstants.PLAN_DELETE_FAIL);
 		}
 		return new ResponseEntity<String>(msg, HttpStatus.OK);
 	}
@@ -79,12 +94,14 @@ public class PlanRestController {
 	@PutMapping("/statusChange/{planId}/{status}")
 	public ResponseEntity<String> planStatusChange(@PathVariable Integer planId, @PathVariable String status) {
 		boolean isChanged = planService.planStatusChange(planId, status);
-		String msg = "";
+		String msg = AppConstants.EMPTY_STR;
+
 		if (isChanged) {
-			msg = "plan status is changed";
+			msg = messages.get(AppConstants.PLAN_STATUS_CHANGE);
 		} else {
-			msg = "Plan status is not changed";
+			msg = messages.get(AppConstants.PLAN_STATUS_CHANGE_FAIL);
 		}
 		return new ResponseEntity<String>(msg, HttpStatus.OK);
 	}
+	 
 }
